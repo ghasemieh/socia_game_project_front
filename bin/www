@@ -1,0 +1,191 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+//process.env.TZ = 'Asia/Tehran';
+
+var app = require('../app');
+
+var debug = require('debug')('online-games:server');
+var http = require('http');
+
+
+var socketIoJwt = require('socketio-jwt');
+
+var _ = require("../helpers/_");
+var game = require('../games/game');
+var xo = require('../games/xo/xo');
+var dot = require('../games/dot/dot');
+var card = require('../games/card/card');
+var battleship = require('../games/battleship/battleship');
+var cronJob = require('./../helpers/cronjob');
+var timings = require('./../helpers/timings');
+var mongoose = require('mongoose');
+
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+    var port = parseInt(val, 10);
+
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
+
+    if (port >= 0) {
+        // port number
+        return port;
+    }
+
+    return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
+
+    var bind = typeof port === 'string'
+        ? 'Pipe ' + port
+        : 'Port ' + port;
+
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use');
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+    var addr = server.address();
+    var bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
+    debug('Listening on ' + bind);
+}
+
+
+// socket jwt
+io.use(socketIoJwt.authorize({
+    secret: _.jwtSecret,
+    handshake: true
+}));
+
+
+// socket address checking
+io.use(function (socket, next) {
+
+    var url = socket.request.headers.referer;
+    url = url.split('/');
+
+    if (!url.hasOwnProperty(2)) {
+        socket.disconnect();
+        return false;
+    }
+
+    var domain = url[2];
+    domain = domain.replace('www.', '');
+    if (domain !== 'moliran.com' && domain !== "185.51.200.26") {
+        socket.disconnect();
+        return false;
+    }
+
+    return next();
+});
+
+
+// socket connection
+io.on('connection', function (socket) {
+
+    // disconnect
+    socket.on('disconnect', _.resetSocketId(socket.id));
+
+
+    // payments
+    socket.on('sendPinConfirmation', game.sendPinConfirmation(io, socket));
+
+
+    /**
+     * x, y
+     */
+    socket.on('xo_placeMarker', xo.xo_placeMarker(io, socket));
+
+
+    /**
+     * side="h"|"v", i, j
+     */
+    socket.on("dot_drawLine", dot.dot_drawLine(io, socket));
+
+
+    /**
+     * i, j
+     */
+    socket.on("card_flipCard", card.card_flipCard(io, socket));
+
+
+    /**
+     * arranging the ships is done
+     * data=array of ships
+     */
+    socket.on("battleship_arrangeDone", battleship.battleship_arrangeDone(io, socket));
+    socket.on("battleship_shoot", battleship.battleship_shoot(io, socket));
+
+
+    // get user, update socket id then run the game
+    _.updateSocketId(socket, function (err, user) {
+        if (err || !user || !user.nickname) return socket.disconnect();
+
+        return game.gamerConnected(io, socket, user);
+    });
+
+});
+
+// Reset timeouts of all games
+timings.resetTimeoutsFromDatabase(io);
+
+// force exit from socket after each run
+cronJob.resetAllSocketIds();
