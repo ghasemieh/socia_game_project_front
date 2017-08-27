@@ -17,37 +17,19 @@ function createBoard(data, socket) {
 
     if (timeToPLay > 0) {
 
-        if($(window).width() < 481){
-            $('.timer *').remove();
+        $('.timer *').remove();
 
-            $('.timer').circularCountDown({
-                fontSize: 35,
-                size: 60,
-                fontColor: '#FFF',
-                colorCircle: 'white',
-                background: '#00d6ff',
-                reverseLoading: false,
-                duration: {
-                    seconds: timeToPLay
-                }
-            });
-        }else {
-            $('.timer *').remove();
-
-            $('.timer').circularCountDown({
-                fontSize: 25,
-                size: 60,
-                fontColor: '#FFF',
-                colorCircle: 'white',
-                background: '#00d6ff',
-                reverseLoading: false,
-                duration: {
-                    seconds: timeToPLay
-                }
-            });
-        }
-
-
+        $('.timer').circularCountDown({
+            fontSize: 25,
+            size: 60,
+            fontColor: '#FFF',
+            colorCircle: 'white',
+            background: '#00d6ff',
+            reverseLoading: false,
+            duration: {
+                seconds: timeToPLay
+            }
+        });
     }
 
     var yourTurn = false;
