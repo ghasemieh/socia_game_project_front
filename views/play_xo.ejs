@@ -91,10 +91,16 @@
                     swal({
                         title: "خطا",
                         text: "ارتباط با سرور قطع شد!",
-                        showConfirmButton: false,
+                        showConfirmButton: true,
+                        confirmButtonText: "تلاش دوباره",
                         type: "error",
                         allowOutsideClick: false
+                    },function (isConfirm) {
+                        if (isConfirm) {
+                            location.reload();
+                        }
                     });
+                
                 }
             });
 
