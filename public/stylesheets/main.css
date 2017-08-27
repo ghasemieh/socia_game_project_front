@@ -762,8 +762,11 @@ line-height: 22px}
   float: left; }
 
 @media screen and (max-width: 450px){
-  #opponent *{
-    font-size: 15px;
+  #opponent {
+    font-size: 13px;
+  }
+  #me{
+    font-size: 13px;
   }
 }
 
