@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3ff0b267-6064-456b-b6a2-13155cf1511e" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/xo-frontend-game.js" afterPath="$PROJECT_DIR$/public/javascripts/xo-frontend-game.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -459,7 +458,7 @@
       <workItem from="1503465669609" duration="13337000" />
       <workItem from="1503729702035" duration="11077000" />
       <workItem from="1503813359392" duration="60000" />
-      <workItem from="1503817257726" duration="6952000" />
+      <workItem from="1503817257726" duration="6965000" />
     </task>
     <task id="LOCAL-00001" summary="hello">
       <created>1503839208325</created>
@@ -475,11 +474,18 @@
       <option name="project" value="LOCAL" />
       <updated>1503839462526</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="hello">
+      <created>1503839640885</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1503839640885</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="153191000" />
+    <option name="totallyTimeSpent" value="153204000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
