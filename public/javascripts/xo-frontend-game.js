@@ -35,8 +35,8 @@ function createBoard(data, socket) {
             $('.timer *').remove();
 
             $('.timer').circularCountDown({
-                fontSize: 35,
-                size: 110,
+                fontSize: 25,
+                size: 60,
                 fontColor: '#FFF',
                 colorCircle: 'white',
                 background: '#00d6ff',
