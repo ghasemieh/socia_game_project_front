@@ -14,22 +14,40 @@ function createBoard(data, socket) {
 
     var user = JSON.parse(localStorage.getItem('user'));
 
-console.log(equal);
+
     if (timeToPLay > 0) {
 
-        $('.timer *').remove();
+        if($(window).width() < 481){
+            $('.timer *').remove();
 
-        $('.timer').circularCountDown({
-            fontSize: 35,
-            size: 110,
-            fontColor: '#FFF',
-            colorCircle: 'white',
-            background: '#00d6ff',
-            reverseLoading: false,
-            duration: {
-                seconds: timeToPLay
-            }
-        });
+            $('.timer').circularCountDown({
+                fontSize: 35,
+                size: 60,
+                fontColor: '#FFF',
+                colorCircle: 'white',
+                background: '#00d6ff',
+                reverseLoading: false,
+                duration: {
+                    seconds: timeToPLay
+                }
+            });
+        }else {
+            $('.timer *').remove();
+
+            $('.timer').circularCountDown({
+                fontSize: 35,
+                size: 110,
+                fontColor: '#FFF',
+                colorCircle: 'white',
+                background: '#00d6ff',
+                reverseLoading: false,
+                duration: {
+                    seconds: timeToPLay
+                }
+            });
+        }
+
+
     }
 
     var yourTurn = false;
@@ -88,7 +106,7 @@ console.log(equal);
         var markerIcoMe = '<i class="fa fa-circle-o" style="margin:0 2px; color: #FF5722"></i>'
     }
     $("#opponent").html(opponent + ' (' + markerIco + ')');
-    $("#me").html(me + ' (' + markerIcoMe + ')');
+    $("#me").html(' (' + markerIcoMe + ')');
 
     $("#opponent").parent().fadeIn();
 
